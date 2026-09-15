@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mr. Fred's Brain Break Arcade</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Fredoka & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+      color: #f8fafc;
+      min-height: 100vh;
+    }
+
+    .font-heading {
+      font-family: 'Fredoka', cursive;
+    }
+
+    /* Glassmorphism Cards */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    .glass-button {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.2s ease-in-out;
+    }
+    .glass-button:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+    }
+    .glass-button:active {
+      transform: translateY(0);
+    }
+
+    /* Glow Effects */
+    .arcade-glow {
+      text-shadow: 0 0 12px rgba(236, 72, 153, 0.6), 0 0 24px rgba(168, 85, 247, 0.4);
+    }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(168, 85, 247, 0.5);
+      border-radius: 4px;
+    }
+
+    /* Pulse Timer */
+    @keyframes pulse-fast {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.08); opacity: 0.8; }
+    }
+    .animate-pulse-fast {
+      animation: pulse-fast 0.6s infinite;
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen text-slate-100 overflow-x-hidden">
+
+  <!-- Top Navigation & Global Scoreboard Header -->
+  <header class="glass-panel sticky top-0 z-40 border-b border-white/10 px-4 py-3">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
+      
+      <!-- Logo & Title -->
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('dashboard')">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-400 via-rose-500 to-purple-600 flex items-center justify-center shadow-lg shadow-rose-500/30">
+          <i class="fa-solid font-heading text-2xl text-white">F</i>
+        </div>
+        <div>
+          <h1 class="font-heading text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-amber-300 via-pink-400 to-purple-300 arcade-glow">
+            MR. FRED'S ARCADE
+          </h1>
+          <p class="text-xs text-purple-300 font-medium tracking-wider uppercase">Classroom Brain Breaks & 20-Min Challenge Zone</p>
+        </div>
+      </div>
+
+      <!-- Quick Utility Action Bar -->
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="toggleScoreboard()" class="glass-button px-3 py-1.5 rounded-xl text-sm font-semibold flex items-center gap-2 text-amber-300">
+          <i class="fa-solid fa-trophy"></i>
+          <span>Scoreboard</span>
+        </button>
+        <button onclick="openNamePicker()" class="glass-button px-3 py-1.5 rounded-xl text-sm font-semibold flex items-center gap-2 text-emerald-300">
+          <i class="fa-solid fa-users"></i>
+          <span>Name Picker</span>
+        </button>
+        <button onclick="openSoundboard()" class="glass-button px-3 py-1.5 rounded-xl text-sm font-semibold flex items-center gap-2 text-sky-300">
+          <i class="fa-solid fa-volume-high"></i>
+          <span>SFX</span>
+        </button>
+        <button onclick="toggleGlobalTimer()" class="glass-button px-3 py-1.5 rounded-xl text-sm font-semibold flex items-center gap-2 text-rose-300">
+          <i class="fa-solid fa-stopwatch"></i>
+          <span id="global-timer-display">05:00</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Collapsible Scoreboard Drawer -->
+    <div id="scoreboard-drawer" class="hidden max-w-7xl mx-auto mt-3 pt-3 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 gap-3">
+      <!-- Team 1 -->
+      <div class="bg-indigo-950/60 p-3 rounded-xl border border-indigo-500/30 flex items-center justify-between">
+        <div>
+          <input type="text" value="Red Dragons" class="bg-transparent font-heading font-semibold text-rose-400 w-28 focus:outline-none" />
+          <div class="text-2xl font-bold font-heading text-white" id="score-team-1">0</div>
+        </div>
+        <div class="flex flex-col gap-1">
+          <button onclick="adjustScore(1, 100)" class="bg-rose-500/30 hover:bg-rose-500/50 w-7 h-7 rounded text-xs font-bold">+</button>
+          <button onclick="adjustScore(1, -50)" class="bg-rose-500/20 hover:bg-rose-500/40 w-7 h-7 rounded text-xs font-bold">-</button>
+        </div>
+      </div>
+      <!-- Team 2 -->
+      <div class="bg-indigo-950/60 p-3 rounded-xl border border-indigo-500/30 flex items-center justify-between">
+        <div>
+          <input type="text" value="Blue Wizards" class="bg-transparent font-heading font-semibold text-sky-400 w-28 focus:outline-none" />
+          <div class="text-2xl font-bold font-heading text-white" id="score-team-2">0</div>
+        </div>
+        <div class="flex flex-col gap-1">
+          <button onclick="adjustScore(2, 100)" class="bg-sky-500/30 hover:bg-sky-500/50 w-7 h-7 rounded text-xs font-bold">+</button>
+          <button onclick="adjustScore(2, -50)" class="bg-sky-500/20 hover:bg-sky-500/40 w-7 h-7 rounded text-xs font-bold">-</button>
+        </div>
+      </div>
+      <!-- Team 3 -->
+      <div class="bg-indigo-950/60 p-3 rounded-xl border border-indigo-500/30 flex items-center justify-between">
+        <div>
+          <input type="text" value="Green Ninjas" class="bg-transparent font-heading font-semibold text-emerald-400 w-28 focus:outline-none" />
+          <div class="text-2xl font-bold font-heading text-white" id="score-team-3">0</div>
+        </div>
+        <div class="flex flex-col gap-1">
+          <button onclick="adjustScore(3, 100)" class="bg-emerald-500/30 hover:bg-emerald-500/50 w-7 h-7 rounded text-xs font-bold">+</button>
+          <button onclick="adjustScore(3, -50)" class="bg-emerald-500/20 hover:bg-emerald-500/40 w-7 h-7 rounded text-xs font-bold">-</button>
+        </div>
+      </div>
+      <!-- Team 4 -->
+      <div class="bg-indigo-950/60 p-3 rounded-xl border border-indigo-500/30 flex items-center justify-between">
+        <div>
+          <input type="text" value="Gold Phoenix" class="bg-transparent font-heading font-semibold text-amber-400 w-28 focus:outline-none" />
+          <div class="text-2xl font-bold font-heading text-white" id="score-team-4">0</div>
+        </div>
+        <div class="flex flex-col gap-1">
+          <button onclick="adjustScore(4, 100)" class="bg-amber-500/30 hover:bg-amber-500/50 w-7 h-7 rounded text-xs font-bold">+</button>
+          <button onclick="adjustScore(4, -50)" class="bg-amber-500/20 hover:bg-amber-500/40 w-7 h-7 rounded text-xs font-bold">-</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Interactive Area -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 flex flex-col justify-center">
+
+    <!-- DASHBOARD VIEW -->
+    <div id="view-dashboard" class="space-y-6">
+      <!-- Welcome Banner -->
+      <div class="glass-panel p-6 md:p-8 rounded-3xl relative overflow-hidden bg-gradient-to-r from-purple-900/50 via-indigo-900/40 to-slate-900/60 border border-purple-500/30">
+        <div class="max-w-2xl">
+          <span class="px-3 py-1 rounded-full bg-purple-500/20 border border-purple-400/30 text-purple-300 text-xs font-bold tracking-wide uppercase">
+            Ready in 5 seconds • No Prep Needed
+          </span>
+          <h2 class="font-heading text-3xl md:text-5xl font-bold mt-3 text-white">
+            Got 20 Minutes Left? Let's Play! 🎉
+          </h2>
+          <p class="text-slate-300 text-base md:text-lg mt-2">
+            Select a quick game below to project on the screen. Perfect for energizing students, reviewing terms, or wrapping up class with friendly competition.
+          </p>
+        </div>
+      </div>
+
+      <!-- Game Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- Game 1: Scattergories -->
+        <div onclick="switchView('scattergories')" class="glass-panel p-5 rounded-2xl cursor-pointer hover:border-amber-400/50 hover:bg-white/10 transition-all transform hover:-translate-y-1 group">
+          <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-font"></i>
+          </div>
+          <h3 class="font-heading text-xl font-bold text-white mb-1">Scattergories</h3>
+          <p class="text-sm text-slate-300">Roll a letter & list matching items before time runs out!</p>
+          <span class="inline-block mt-4 text-xs font-semibold text-amber-400 group-hover:underline">Launch Game →</span>
+        </div>
+
+        <!-- Game 2: Word Grid (Boggle) -->
+        <div onclick="switchView('boggle')" class="glass-panel p-5 rounded-2xl cursor-pointer hover:border-emerald-400/50 hover:bg-white/10 transition-all transform hover:-translate-y-1 group">
+          <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-border-all"></i>
+          </div>
+          <h3 class="font-heading text-xl font-bold text-white mb-1">Word Grid</h3>
+          <p class="text-sm text-slate-300">Find hidden words in a 4x4 letter cube grid under 3 mins.</p>
+          <span class="inline-block mt-4 text-xs font-semibold text-emerald-400 group-hover:underline">Launch Game →</span>
+        </div>
+
+        <!-- Game 3: Don't Say It! (Taboo) -->
+        <div onclick="switchView('taboo')" class="glass-panel p-5 rounded-2xl cursor-pointer hover:border-rose-400/50 hover:bg-white/10 transition-all transform hover:-translate-y-1 group">
+          <div class="w-12 h-12 rounded-xl bg-rose-500/20 text-rose-300 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-ban"></i>
+          </div>
+          <h3 class="font-heading text-xl font-bold text-white mb-1">Don't Say It!</h3>
+          <p class="text-sm text-slate-300">Get your team to guess without mentioning forbidden terms.</p>
+          <span class="inline-block mt-4 text-xs font-semibold text-rose-400 group-hover:underline">Launch Game →</span>
+        </div>
+
+        <!-- Game 4: 5-Second Rule -->
+        <div onclick="switchView('fivesec')" class="glass-panel p-5 rounded-2xl cursor-pointer hover:border-sky-400/50 hover:bg-white/10 transition-all transform hover:-translate-y-1 group">
+          <div class="w-12 h-12 rounded-xl bg-sky-500/20 text-sky-300 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-bolt"></i>
+          </div>
+          <h3 class="font-heading text-xl font-bold text-white mb-1">5-Second Rule</h3>
+          <p class="text-sm text-slate-300">Fast-paced lightning round! Name 3 items before the buzzer.</p>
+          <span class="inline-block mt-4 text-xs font-semibold text-sky-400 group-hover:underline">Launch Game →</span>
+        </div>
+
+        <!-- Game 5: Smartboard Draw & Guess -->
+        <div onclick="switchView('pictionary')" class="glass-panel p-5 rounded-2xl cursor-pointer hover:border-purple-400/50 hover:bg-white/10 transition-all transform hover:-translate-y-1 group">
+          <div class="w-12 h-12 rounded-xl bg-purple-500/20 text-purple-300 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-paint-brush"></i>
+          </div>
+          <h3 class="font-heading text-xl font-bold text-white mb-1">Draw & Guess</h3>
+          <p class="text-sm text-slate-300">Interactive digital whiteboard canvas with prompt generator.</p>
+          <span class="inline-block mt-4 text-xs font-semibold text-purple-400 group-hover:underline">Launch Game →</span>
+        </div>
+
+        <!-- Game 6: Classroom Wordle -->
+        <div onclick="switchView('wordle')" class="glass-panel p-5 rounded-2xl cursor-pointer hover:border-teal-400/50 hover:bg-white/10 transition-all transform hover:-translate-y-1 group">
+          <div class="w-12 h-12 rounded-xl bg-teal-500/20 text-teal-300 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-square-poll-vertical"></i>
+          </div>
+          <h3 class="font-heading text-xl font-bold text-white mb-1">Class Word Guess</h3>
+          <p class="text-sm text-slate-300">Projectable 5-letter word puzzle for class collaboration.</p>
+          <span class="inline-block mt-4 text-xs font-semibold text-teal-400 group-hover:underline">Launch Game →</span>
+        </div>
+
+        <!-- Game 7: Would You Rather -->
+        <div onclick="switchView('wyr')" class="glass-panel p-5 rounded-2xl cursor-pointer hover:border-pink-400/50 hover:bg-white/10 transition-all transform hover:-translate-y-1 group">
+          <div class="w-12 h-12 rounded-xl bg-pink-500/20 text-pink-300 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-scale-balanced"></i>
+          </div>
+          <h3 class="font-heading text-xl font-bold text-white mb-1">Would You Rather?</h3>
+          <p class="text-sm text-slate-300">Sparks fun class discussions & debates with live voting stats.</p>
+          <span class="inline-block mt-4 text-xs font-semibold text-pink-400 group-hover:underline">Launch Game →</span>
+        </div>
+
+        <!-- Game 8: Wheel of Fortune -->
+        <div onclick="switchView('wheel')" class="glass-panel p-5 rounded-2xl cursor-pointer hover:border-indigo-400/50 hover:bg-white/10 transition-all transform hover:-translate-y-1 group">
+          <div class="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-compact-disc"></i>
+          </div>
+          <h3 class="font-heading text-xl font-bold text-white mb-1">Trivia Wheel</h3>
+          <p class="text-sm text-slate-300">Spin the wheel to select categories and trivia challenges.</p>
+          <span class="inline-block mt-4 text-xs font-semibold text-indigo-400 group-hover:underline">Launch Game →</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- GAME 1: SCATTERGORIES -->
+    <div id="view-scattergories" class="hidden space-y-6">
+      <div class="flex items-center justify-between">
+        <button onclick="switchView('dashboard')" class="glass-button px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2">
+          <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </button>
+        <span class="font-heading text-2xl text-amber-300 font-bold">Scattergories Challenge</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Spinner & Roll Box -->
+        <div class="glass-panel p-6 rounded-3xl flex flex-col items-center justify-center text-center">
+          <p class="text-sm text-slate-300 font-semibold mb-2">TARGET LETTER</p>
+          <div id="scat-letter" class="w-32 h-32 rounded-3xl bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center text-7xl font-bold font-heading text-amber-300 shadow-xl my-4">
+            ?
+          </div>
+          <button onclick="rollScattergoriesLetter()" class="glass-button px-6 py-3 rounded-2xl bg-amber-500/30 text-amber-200 font-bold text-lg w-full hover:bg-amber-500/50">
+            <i class="fa-solid fa-dice mr-2"></i> Roll Random Letter
+          </button>
+        </div>
+
+        <!-- Topics List -->
+        <div class="glass-panel p-6 rounded-3xl md:col-span-2 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-heading text-xl font-bold text-white">Current Topics</h3>
+            <button onclick="generateScattergoriesTopics()" class="glass-button px-4 py-2 rounded-xl text-xs font-bold text-purple-300">
+              <i class="fa-solid fa-arrows-rotate mr-1"></i> New List
+            </button>
+          </div>
+          <ol id="scat-topics-list" class="space-y-2.5 text-lg text-slate-200 list-decimal list-inside font-medium">
+            <li class="p-3 bg-white/5 rounded-xl border border-white/10">Click "New List" to load categories!</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAME 2: WORD GRID (BOGGLE) -->
+    <div id="view-boggle" class="hidden space-y-6">
+      <div class="flex items-center justify-between">
+        <button onclick="switchView('dashboard')" class="glass-button px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2">
+          <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </button>
+        <span class="font-heading text-2xl text-emerald-300 font-bold">4x4 Word Grid</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+        <!-- Grid -->
+        <div class="glass-panel p-6 rounded-3xl flex flex-col items-center">
+          <div id="boggle-grid" class="grid grid-cols-4 gap-3 w-full max-w-sm">
+            <!-- Populated via JS -->
+          </div>
+          <button onclick="generateBoggleGrid()" class="glass-button px-6 py-3 rounded-2xl bg-emerald-500/30 text-emerald-200 font-bold text-lg mt-6 w-full hover:bg-emerald-500/50">
+            <i class="fa-solid fa-shuffle mr-2"></i> Shake & Generate New Grid
+          </button>
+        </div>
+
+        <!-- Instructions & Note Board -->
+        <div class="glass-panel p-6 rounded-3xl space-y-4">
+          <h3 class="font-heading text-xl font-bold text-emerald-300">How to Play</h3>
+          <p class="text-sm text-slate-300">
+            Find as many words as possible (3+ letters) by connecting letters adjacent to each other (horizontally, vertically, or diagonally). Unique words get 1 point!
+          </p>
+          <div class="p-4 bg-slate-900/60 rounded-2xl border border-white/10 space-y-2">
+            <label class="text-xs font-bold text-slate-400 uppercase">Board Notepad / Class Word Log</label>
+            <textarea placeholder="Type words discovered by students here..." class="w-full h-36 bg-transparent border-none text-emerald-200 focus:outline-none resize-none font-mono text-sm"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAME 3: DON'T SAY IT! -->
+    <div id="view-taboo" class="hidden space-y-6">
+      <div class="flex items-center justify-between">
+        <button onclick="switchView('dashboard')" class="glass-button px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2">
+          <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </button>
+        <div class="flex items-center gap-2">
+          <select id="taboo-category-select" onchange="nextTabooCard()" class="bg-indigo-950 border border-purple-400/40 rounded-xl px-3 py-1.5 text-xs text-purple-200 focus:outline-none">
+            <option value="all">All Subject Categories</option>
+            <option value="general">General Fun</option>
+            <option value="science">Science & Nature</option>
+            <option value="history">History & Social Studies</option>
+          </select>
+          <span class="font-heading text-2xl text-rose-300 font-bold">Don't Say It!</span>
+        </div>
+      </div>
+
+      <div class="max-w-md mx-auto">
+        <div class="glass-panel p-8 rounded-3xl border-2 border-rose-500/40 text-center shadow-2xl relative overflow-hidden">
+          <p class="text-xs font-bold text-rose-400 uppercase tracking-widest mb-2">TARGET WORD</p>
+          <div id="taboo-target" class="font-heading text-4xl font-extrabold text-white mb-6 p-4 bg-rose-500/20 rounded-2xl border border-rose-400/30">
+            SUNFLOWER
+          </div>
+
+          <div class="bg-slate-900/80 p-5 rounded-2xl border border-white/10 mb-6">
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">FORBIDDEN WORDS 🚫</p>
+            <ul id="taboo-forbidden" class="space-y-2 text-lg font-semibold text-slate-200">
+              <li>Yellow</li>
+              <li>Plant</li>
+              <li>Flower</li>
+              <li>Seeds</li>
+            </ul>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <button onclick="nextTabooCard()" class="glass-button py-3 rounded-2xl bg-emerald-500/30 text-emerald-200 font-bold hover:bg-emerald-500/50">
+              <i class="fa-solid fa-check mr-1"></i> Correct!
+            </button>
+            <button onclick="nextTabooCard()" class="glass-button py-3 rounded-2xl bg-rose-500/30 text-rose-200 font-bold hover:bg-rose-500/50">
+              <i class="fa-solid fa-forward mr-1"></i> Skip Card
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAME 4: 5-SECOND RULE -->
+    <div id="view-fivesec" class="hidden space-y-6">
+      <div class="flex items-center justify-between">
+        <button onclick="switchView('dashboard')" class="glass-button px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2">
+          <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </button>
+        <span class="font-heading text-2xl text-sky-300 font-bold">5-Second Rule</span>
+      </div>
+
+      <div class="max-w-2xl mx-auto glass-panel p-8 rounded-3xl text-center space-y-6 border-2 border-sky-400/30">
+        <!-- Visual Countdown Wheel -->
+        <div class="relative w-40 h-40 mx-auto flex items-center justify-center">
+          <svg class="w-full h-full transform -rotate-90">
+            <circle cx="80" cy="80" r="70" stroke="rgba(255,255,255,0.1)" stroke-width="12" fill="none" />
+            <circle id="fivesec-circle" cx="80" cy="80" r="70" stroke="#38bdf8" stroke-width="12" fill="none" stroke-dasharray="440" stroke-dashoffset="0" class="transition-all duration-1000 ease-linear" />
+          </svg>
+          <span id="fivesec-countdown" class="absolute font-heading text-6xl font-bold text-white">5</span>
+        </div>
+
+        <div class="p-6 bg-slate-900/60 rounded-2xl border border-white/10">
+          <p class="text-xs font-bold text-sky-400 uppercase tracking-widest mb-2">NAME 3...</p>
+          <div id="fivesec-prompt" class="font-heading text-2xl md:text-3xl font-bold text-white">
+            Click "Get Prompt" to Start!
+          </div>
+        </div>
+
+        <div class="flex gap-4">
+          <button onclick="nextFiveSecPrompt()" class="glass-button py-4 rounded-2xl bg-sky-500/30 text-sky-200 font-bold text-lg flex-1 hover:bg-sky-500/50">
+            <i class="fa-solid fa-dice mr-2"></i> New Prompt
+          </button>
+          <button onclick="startFiveSecTimer()" class="glass-button py-4 rounded-2xl bg-rose-500/40 text-rose-200 font-bold text-lg flex-1 hover:bg-rose-500/60">
+            <i class="fa-solid fa-play mr-2"></i> START TIMER!
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAME 5: DRAW & GUESS (PICTIONARY) -->
+    <div id="view-pictionary" class="hidden space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <button onclick="switchView('dashboard')" class="glass-button px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2">
+          <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </button>
+        
+        <!-- Prompt Box -->
+        <div class="flex items-center gap-3 bg-purple-950/80 px-4 py-2 rounded-2xl border border-purple-400/30">
+          <span class="text-xs font-bold text-purple-300 uppercase">Prompt:</span>
+          <span id="pictionary-prompt" class="font-heading font-bold text-white text-lg">???</span>
+          <button onclick="newPictionaryPrompt()" class="text-xs text-purple-300 hover:text-white underline ml-2">Reveal New</button>
+        </div>
+
+        <!-- Canvas Controls -->
+        <div class="flex items-center gap-2 bg-slate-900/80 p-1.5 rounded-2xl border border-white/10">
+          <input type="color" id="draw-color" value="#38bdf8" class="w-8 h-8 rounded cursor-pointer bg-transparent border-none" />
+          <input type="range" id="draw-size" min="2" max="24" value="6" class="w-20 accent-purple-400" />
+          <button onclick="clearCanvas()" class="glass-button px-3 py-1 rounded-xl text-xs font-bold text-rose-300">Clear Board</button>
+        </div>
+      </div>
+
+      <!-- Canvas Area -->
+      <div class="glass-panel p-2 rounded-3xl border border-purple-500/30">
+        <canvas id="drawing-canvas" class="w-full h-[450px] bg-slate-950 rounded-2xl cursor-crosshair touch-none"></canvas>
+      </div>
+    </div>
+
+    <!-- GAME 6: CLASSROOM WORDLE -->
+    <div id="view-wordle" class="hidden space-y-6">
+      <div class="flex items-center justify-between">
+        <button onclick="switchView('dashboard')" class="glass-button px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2">
+          <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </button>
+        <button onclick="resetWordleGame()" class="glass-button px-3 py-1.5 rounded-xl text-xs font-bold text-teal-300">
+          <i class="fa-solid fa-arrows-rotate mr-1"></i> New Game
+        </button>
+      </div>
+
+      <div class="max-w-md mx-auto space-y-4">
+        <!-- Wordle Grid -->
+        <div id="wordle-board" class="grid grid-rows-6 gap-2">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- On Screen Keyboard -->
+        <div id="wordle-keyboard" class="space-y-1.5 pt-2">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- GAME 7: WOULD YOU RATHER -->
+    <div id="view-wyr" class="hidden space-y-6">
+      <div class="flex items-center justify-between">
+        <button onclick="switchView('dashboard')" class="glass-button px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2">
+          <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </button>
+        <button onclick="nextWYRPrompt()" class="glass-button px-4 py-2 rounded-xl text-sm font-bold text-pink-300">
+          <i class="fa-solid fa-shuffle mr-1"></i> Next Scenario
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <!-- Option A -->
+        <div onclick="voteWYR('A')" class="glass-panel p-8 rounded-3xl border-2 border-pink-500/40 text-center cursor-pointer hover:bg-pink-500/10 transition-all flex flex-col justify-between group">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 text-xs font-bold uppercase tracking-wider">Option A</span>
+            <div id="wyr-option-a" class="font-heading text-2xl md:text-3xl font-bold text-white my-6">
+              Option A Prompt...
+            </div>
+          </div>
+          <div>
+            <div class="w-full bg-slate-900 rounded-full h-4 overflow-hidden border border-white/10 mb-2">
+              <div id="wyr-bar-a" class="bg-pink-500 h-full transition-all duration-500" style="width: 50%"></div>
+            </div>
+            <span id="wyr-count-a" class="text-sm font-bold text-pink-300">0 Votes (50%)</span>
+          </div>
+        </div>
+
+        <!-- Option B -->
+        <div onclick="voteWYR('B')" class="glass-panel p-8 rounded-3xl border-2 border-purple-500/40 text-center cursor-pointer hover:bg-purple-500/10 transition-all flex flex-col justify-between group">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-bold uppercase tracking-wider">Option B</span>
+            <div id="wyr-option-b" class="font-heading text-2xl md:text-3xl font-bold text-white my-6">
+              Option B Prompt...
+            </div>
+          </div>
+          <div>
+            <div class="w-full bg-slate-900 rounded-full h-4 overflow-hidden border border-white/10 mb-2">
+              <div id="wyr-bar-b" class="bg-purple-500 h-full transition-all duration-500" style="width: 50%"></div>
+            </div>
+            <span id="wyr-count-b" class="text-sm font-bold text-purple-300">0 Votes (50%)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAME 8: TRIVIA WHEEL -->
+    <div id="view-wheel" class="hidden space-y-6">
+      <div class="flex items-center justify-between">
+        <button onclick="switchView('dashboard')" class="glass-button px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2">
+          <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </button>
+        <span class="font-heading text-2xl text-indigo-300 font-bold">Wheel of Knowledge</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+        <!-- Canvas Wheel -->
+        <div class="glass-panel p-6 rounded-3xl flex flex-col items-center relative">
+          <div class="w-0 h-0 border-l-[15px] border-l-transparent border-r-[15px] border-r-transparent border-t-[25px] border-t-amber-400 absolute top-4 z-10"></div>
+          <canvas id="wheel-canvas" width="340" height="340" class="max-w-full"></canvas>
+          <button onclick="spinTriviaWheel()" class="glass-button px-8 py-3 rounded-2xl bg-indigo-500/40 text-indigo-200 font-bold text-lg mt-4 hover:bg-indigo-500/60">
+            <i class="fa-solid fa-arrows-spin mr-2"></i> SPIN WHEEL!
+          </button>
+        </div>
+
+        <!-- Question Card Display -->
+        <div class="glass-panel p-6 rounded-3xl space-y-4 text-center">
+          <span id="wheel-category-badge" class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold uppercase tracking-widest">
+            Spin to Select Category
+          </span>
+          <div id="wheel-question-box" class="font-heading text-xl md:text-2xl font-bold text-white min-h-[100px] flex items-center justify-center p-4 bg-slate-900/60 rounded-2xl border border-white/10">
+            Click "SPIN WHEEL" to land on a category prompt!
+          </div>
+          <button id="wheel-answer-btn" onclick="toggleWheelAnswer()" class="glass-button px-4 py-2 rounded-xl text-sm font-bold text-amber-300 hidden">
+            Show Answer
+          </button>
+          <div id="wheel-answer-box" class="text-emerald-400 font-bold text-lg hidden pt-2"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MODAL: RANDOM NAME PICKER -->
+  <div id="modal-namepicker" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel max-w-md w-full p-6 rounded-3xl space-y-4 relative border border-emerald-500/30">
+      <button onclick="closeNamePicker()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+      <h3 class="font-heading text-2xl font-bold text-emerald-300">Classroom Name Picker</h3>
+      
+      <div id="picker-display" class="font-heading text-3xl font-extrabold text-center py-8 bg-slate-900/80 rounded-2xl border border-white/10 text-white min-h-[100px] flex items-center justify-center">
+        Ready to Pick!
+      </div>
+
+      <div class="space-y-2">
+        <label class="text-xs font-bold text-slate-400 uppercase">Student List (comma separated)</label>
+        <textarea id="student-names-input" class="w-full h-24 p-3 rounded-xl bg-slate-900/60 border border-white/10 text-sm text-slate-200 focus:outline-none resize-none">Alex, Sarah, David, Maya, Leo, Emma, Lucas, Chloe, Ethan, Zoe</textarea>
+      </div>
+
+      <button onclick="pickRandomStudent()" class="glass-button py-3 rounded-2xl bg-emerald-500/40 text-emerald-100 font-bold text-lg w-full hover:bg-emerald-500/60">
+        <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Pick Random Student
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: SOUNDBOARD -->
+  <div id="modal-soundboard" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel max-w-sm w-full p-6 rounded-3xl space-y-4 relative border border-sky-500/30">
+      <button onclick="closeSoundboard()" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+      <h3 class="font-heading text-2xl font-bold text-sky-300">Classroom Soundboard</h3>
+      
+      <div class="grid grid-cols-2 gap-3 pt-2">
+        <button onclick="playSFX('cheer')" class="glass-button p-4 rounded-2xl text-amber-300 font-bold flex flex-col items-center gap-2">
+          <i class="fa-solid fa-hands-clapping text-2xl"></i> Applause
+        </button>
+        <button onclick="playSFX('buzzer')" class="glass-button p-4 rounded-2xl text-rose-300 font-bold flex flex-col items-center gap-2">
+          <i class="fa-solid fa-circle-xmark text-2xl"></i> Buzzer
+        </button>
+        <button onclick="playSFX('chime')" class="glass-button p-4 rounded-2xl text-emerald-300 font-bold flex flex-col items-center gap-2">
+          <i class="fa-solid fa-bell text-2xl"></i> Correct Chime
+        </button>
+        <button onclick="playSFX('drumroll')" class="glass-button p-4 rounded-2xl text-purple-300 font-bold flex flex-col items-center gap-2">
+          <i class="fa-solid fa-drum text-2xl"></i> Drumroll
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* Web Audio API Sound Synthesizer (No external audio files required) */
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playTone(freq, duration, type = 'sine', volume = 0.1) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    }
+
+    function playSFX(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      if (type === 'chime') {
+        playTone(523.25, 0.2, 'triangle', 0.2);
+        setTimeout(() => playTone(659.25, 0.2, 'triangle', 0.2), 100);
+        setTimeout(() => playTone(783.99, 0.4, 'triangle', 0.2), 200);
+      } else if (type === 'buzzer') {
+        playTone(150, 0.5, 'sawtooth', 0.25);
+      } else if (type === 'cheer') {
+        for (let i = 0; i < 6; i++) {
+          setTimeout(() => playTone(400 + Math.random() * 400, 0.15, 'sine', 0.1), i * 60);
+        }
+      } else if (type === 'drumroll') {
+        for (let i = 0; i < 12; i++) {
+          setTimeout(() => playTone(100 + Math.random() * 40, 0.05, 'square', 0.08), i * 50);
+        }
+      }
+    }
+
+    // View Switcher
+    function switchView(viewId) {
+      const views = ['dashboard', 'scattergories', 'boggle', 'taboo', 'fivesec', 'pictionary', 'wordle', 'wyr', 'wheel'];
+      views.forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        if (el) el.classList.add('hidden');
+      });
+      const activeEl = document.getElementById(`view-${viewId}`);
+      if (activeEl) activeEl.classList.remove('hidden');
+
+      // Specific initializations
+      if (viewId === 'pictionary') initPictionaryCanvas();
+      if (viewId === 'wordle' && !wordleInitialized) initWordleBoard();
+      if (viewId === 'wheel') drawWheel();
+    }
+
+    // Scoreboard Drawer Toggle
+    function toggleScoreboard() {
+      const drawer = document.getElementById('scoreboard-drawer');
+      drawer.classList.toggle('hidden');
+    }
+
+    function adjustScore(teamNum, delta) {
+      const scoreEl = document.getElementById(`score-team-${teamNum}`);
+      let current = parseInt(scoreEl.innerText) || 0;
+      current = Math.max(0, current + delta);
+      scoreEl.innerText = current;
+      playSFX('chime');
+    }
+
+    // Global Floating Timer
+    let globalTimerSeconds = 300;
+    let globalTimerInterval = null;
+
+    function toggleGlobalTimer() {
+      if (globalTimerInterval) {
+        clearInterval(globalTimerInterval);
+        globalTimerInterval = null;
+      } else {
+        globalTimerInterval = setInterval(() => {
+          if (globalTimerSeconds > 0) {
+            globalTimerSeconds--;
+            updateGlobalTimerDisplay();
+          } else {
+            clearInterval(globalTimerInterval);
+            globalTimerInterval = null;
+            playSFX('buzzer');
+          }
+        }, 1000);
+      }
+    }
+
+    function updateGlobalTimerDisplay() {
+      const mins = Math.floor(globalTimerSeconds / 60).toString().padStart(2, '0');
+      const secs = (globalTimerSeconds % 60).toString().padStart(2, '0');
+      document.getElementById('global-timer-display').innerText = `${mins}:${secs}`;
+    }
+
+    // Name Picker Modal
+    function openNamePicker() { document.getElementById('modal-namepicker').classList.remove('hidden'); }
+    function closeNamePicker() { document.getElementById('modal-namepicker').classList.add('hidden'); }
+    function openSoundboard() { document.getElementById('modal-soundboard').classList.remove('hidden'); }
+    function closeSoundboard() { document.getElementById('modal-soundboard').classList.add('hidden'); }
+
+    function pickRandomStudent() {
+      const raw = document.getElementById('student-names-input').value;
+      const names = raw.split(',').map(s => s.trim()).filter(s => s.length > 0);
+      if (names.length === 0) return;
+
+      const display = document.getElementById('picker-display');
+      let count = 0;
+      playSFX('drumroll');
+      const interval = setInterval(() => {
+        display.innerText = names[Math.floor(Math.random() * names.length)];
+        count++;
+        if (count > 15) {
+          clearInterval(interval);
+          playSFX('chime');
+        }
+      }, 100);
+    }
+
+    // SCATTERGORIES
+    const scatTopics = [
+      "Things found in a classroom", "Animals", "Foods or Snacks", "Boys or Girls Names",
+      "Countries or Cities", "Things that are green", "Types of Sports", "Movie or TV Titles",
+      "Verbs / Action Words", "Things in Space", "Items at a Grocery Store", "Jobs / Professions"
+    ];
+
+    function rollScattergoriesLetter() {
+      const letters = "ABCDEFGHIJKLMNOPRSTW";
+      const display = document.getElementById('scat-letter');
+      let ticks = 0;
+      const interval = setInterval(() => {
+        display.innerText = letters[Math.floor(Math.random() * letters.length)];
+        ticks++;
+        if (ticks > 12) {
+          clearInterval(interval);
+          playSFX('chime');
+        }
+      }, 80);
+    }
+
+    function generateScattergoriesTopics() {
+      const shuffled = [...scatTopics].sort(() => 0.5 - Math.random()).slice(0, 5);
+      const listEl = document.getElementById('scat-topics-list');
+      listEl.innerHTML = shuffled.map(topic => `<li class="p-3 bg-white/5 rounded-xl border border-white/10 font-semibold text-amber-200">${topic}</li>`).join('');
+      playSFX('chime');
+    }
+
+    // WORD GRID (BOGGLE)
+    function generateBoggleGrid() {
+      const vowels = "AEIOU";
+      const consonants = "BCDFGHJKLMNPQRSTVWYZ";
+      const gridEl = document.getElementById('boggle-grid');
+      gridEl.innerHTML = '';
+
+      for (let i = 0; i < 16; i++) {
+        const isVowel = (i % 3 === 0) || Math.random() < 0.3;
+        const char = isVowel ? vowels[Math.floor(Math.random() * vowels.length)] : consonants[Math.floor(Math.random() * consonants.length)];
+        const cell = document.createElement('div');
+        cell.className = "h-16 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center font-heading text-3xl font-bold text-white shadow-md";
+        cell.innerText = char;
+        gridEl.appendChild(cell);
+      }
+      playSFX('chime');
+    }
+
+    // DON'T SAY IT!
+    const tabooCards = [
+      { cat: 'general', word: 'PIZZA', forbidden: ['Cheese', 'Slice', 'Pepperoni', 'Italian'] },
+      { cat: 'general', word: 'TEACHER', forbidden: ['School', 'Class', 'Homework', 'Grade'] },
+      { cat: 'science', word: 'GRAVITY', forbidden: ['Fall', 'Earth', 'Space', 'Down'] },
+      { cat: 'science', word: 'PHOTOSYNTHESIS', forbidden: ['Plant', 'Sun', 'Green', 'Leaves'] },
+      { cat: 'history', word: 'PYRAMID', forbidden: ['Egypt', 'Pharaoh', 'Triangle', 'Ancient'] },
+      { cat: 'history', word: 'CASTLE', forbidden: ['King', 'Knight', 'Stone', 'Moat'] }
+    ];
+
+    function nextTabooCard() {
+      const catSelect = document.getElementById('taboo-category-select').value;
+      const filtered = catSelect === 'all' ? tabooCards : tabooCards.filter(c => c.cat === catSelect);
+      const card = filtered[Math.floor(Math.random() * filtered.length)];
+
+      document.getElementById('taboo-target').innerText = card.word;
+      const listEl = document.getElementById('taboo-forbidden');
+      listEl.innerHTML = card.forbidden.map(w => `<li>${w}</li>`).join('');
+      playSFX('chime');
+    }
+
+    // 5-SECOND RULE
+    const fiveSecPrompts = [
+      "Yellow Foods", "Superhero Powers", "Things in an Airport", "Types of Trees",
+      "Pizza Toppings", "Things with Wheels", "Words starting with 'S'", "Ocean Creatures"
+    ];
+    let fiveSecInterval = null;
+
+    function nextFiveSecPrompt() {
+      const p = fiveSecPrompts[Math.floor(Math.random() * fiveSecPrompts.length)];
+      document.getElementById('fivesec-prompt').innerText = p;
+      resetFiveSecTimer();
+    }
+
+    function resetFiveSecTimer() {
+      if (fiveSecInterval) clearInterval(fiveSecInterval);
+      fiveSecInterval = null;
+      document.getElementById('fivesec-countdown').innerText = '5';
+      document.getElementById('fivesec-circle').style.strokeDashoffset = '0';
+    }
+
+    function startFiveSecTimer() {
+      resetFiveSecTimer();
+      let left = 5;
+      const circle = document.getElementById('fivesec-circle');
+      const totalOffset = 440;
+
+      fiveSecInterval = setInterval(() => {
+        left--;
+        document.getElementById('fivesec-countdown').innerText = left;
+        circle.style.strokeDashoffset = totalOffset - (totalOffset * ((5 - left) / 5));
+        
+        if (left > 0) {
+          playTone(600, 0.1, 'sine', 0.1);
+        } else {
+          clearInterval(fiveSecInterval);
+          fiveSecInterval = null;
+          playSFX('buzzer');
+        }
+      }, 1000);
+    }
+
+    // DRAW & GUESS (PICTIONARY)
+    const picPrompts = ["Cat", "Rocket", "Bicycle", "Eiffel Tower", "Ice Cream", "Volcano", "Robot", "Guitar"];
+    let canvas, ctx, isDrawing = false;
+
+    function initPictionaryCanvas() {
+      canvas = document.getElementById('drawing-canvas');
+      ctx = canvas.getContext('2d');
+      
+      // Handle canvas resolution
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      // Mouse events
+      canvas.onmousedown = (e) => { isDrawing = true; draw(e); };
+      canvas.onmousemove = draw;
+      canvas.onmouseup = () => isDrawing = false;
+
+      // Touch events for mobile/smartboards
+      canvas.ontouchstart = (e) => { isDrawing = true; draw(e.touches[0]); };
+      canvas.ontouchmove = (e) => draw(e.touches[0]);
+      canvas.ontouchend = () => isDrawing = false;
+
+      newPictionaryPrompt();
+    }
+
+    function draw(e) {
+      if (!isDrawing) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      ctx.strokeStyle = document.getElementById('draw-color').value;
+      ctx.lineWidth = document.getElementById('draw-size').value;
+
+      ctx.lineTo(x, y);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+    }
+
+    function clearCanvas() {
+      if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function newPictionaryPrompt() {
+      const p = picPrompts[Math.floor(Math.random() * picPrompts.length)];
+      document.getElementById('pictionary-prompt').innerText = p;
+      clearCanvas();
+    }
+
+    // CLASSROOM WORDLE
+    const wordleList = ["BRAIN", "CLASS", "LEARN", "SMART", "PAPER", "PENCIL", "TEACH"];
+    let targetWordle = "SMART";
+    let wordleRow = 0;
+    let wordleCol = 0;
+    let currentGuess = "";
+    let wordleInitialized = false;
+
+    function initWordleBoard() {
+      wordleInitialized = true;
+      targetWordle = wordleList[Math.floor(Math.random() * wordleList.length)];
+      wordleRow = 0;
+      wordleCol = 0;
+      currentGuess = "";
+
+      const board = document.getElementById('wordle-board');
+      board.innerHTML = '';
+      for (let r = 0; r < 6; r++) {
+        const row = document.createElement('div');
+        row.className = 'grid grid-cols-5 gap-2';
+        for (let c = 0; c < 5; c++) {
+          const tile = document.createElement('div');
+          tile.id = `w-tile-${r}-${c}`;
+          tile.className = 'h-12 border-2 border-white/20 rounded-xl flex items-center justify-center font-heading text-2xl font-bold uppercase text-white bg-slate-900/40';
+          row.appendChild(tile);
+        }
+        board.appendChild(row);
+      }
+
+      // Keyboard
+      const keys = ["QWERTYUIOP", "ASDFGHJKL", ["ENTER", ..."ZXCVBNM", "DEL"]];
+      const kb = document.getElementById('wordle-keyboard');
+      kb.innerHTML = '';
+      keys.forEach(rowKeys => {
+        const row = document.createElement('div');
+        row.className = 'flex justify-center gap-1';
+        const arr = typeof rowKeys === 'string' ? rowKeys.split('') : rowKeys;
+        arr.forEach(k => {
+          const btn = document.createElement('button');
+          btn.className = 'px-2 py-3 rounded-lg bg-white/10 hover:bg-white/20 font-bold text-xs text-white min-w-[32px]';
+          btn.innerText = k;
+          btn.onclick = () => handleWordleKey(k);
+          row.appendChild(btn);
+        });
+        kb.appendChild(row);
+      });
+    }
+
+    function handleWordleKey(key) {
+      if (key === 'ENTER') {
+        if (currentGuess.length === 5) checkWordleGuess();
+      } else if (key === 'DEL') {
+        if (currentGuess.length > 0) {
+          currentGuess = currentGuess.slice(0, -1);
+          wordleCol--;
+          document.getElementById(`w-tile-${wordleRow}-${wordleCol}`).innerText = '';
+        }
+      } else if (currentGuess.length < 5 && key.length === 1) {
+        document.getElementById(`w-tile-${wordleRow}-${wordleCol}`).innerText = key;
+        currentGuess += key;
+        wordleCol++;
+      }
+    }
+
+    function checkWordleGuess() {
+      for (let i = 0; i < 5; i++) {
+        const tile = document.getElementById(`w-tile-${wordleRow}-${i}`);
+        const char = currentGuess[i];
+        if (char === targetWordle[i]) {
+          tile.className += ' bg-emerald-500 border-emerald-400';
+        } else if (targetWordle.includes(char)) {
+          tile.className += ' bg-amber-500 border-amber-400';
+        } else {
+          tile.className += ' bg-slate-700 border-slate-600';
+        }
+      }
+
+      if (currentGuess === targetWordle) {
+        playSFX('cheer');
+      } else {
+        wordleRow++;
+        wordleCol = 0;
+        currentGuess = "";
+        if (wordleRow === 6) playSFX('buzzer');
+      }
+    }
+
+    function resetWordleGame() { initWordleBoard(); }
+
+    // WOULD YOU RATHER
+    const wyrPrompts = [
+      { a: "Have a flying carpet", b: "Have a invisible cloak" },
+      { a: "Explore the deep ocean", b: "Explore outer space" },
+      { a: "Always speak in rhymes", b: "Always sing instead of speak" }
+    ];
+    let countA = 0, countB = 0;
+
+    function nextWYRPrompt() {
+      const p = wyrPrompts[Math.floor(Math.random() * wyrPrompts.length)];
+      document.getElementById('wyr-option-a').innerText = p.a;
+      document.getElementById('wyr-option-b').innerText = p.b;
+      countA = 0; countB = 0;
+      updateWYRStats();
+    }
+
+    function voteWYR(option) {
+      if (option === 'A') countA++;
+      else countB++;
+      updateWYRStats();
+      playSFX('chime');
+    }
+
+    function updateWYRStats() {
+      const total = countA + countB || 1;
+      const pctA = Math.round((countA / total) * 100);
+      const pctB = Math.round((countB / total) * 100);
+
+      document.getElementById('wyr-bar-a').style.width = `${pctA}%`;
+      document.getElementById('wyr-bar-b').style.width = `${pctB}%`;
+      document.getElementById('wyr-count-a').innerText = `${countA} Votes (${pctA}%)`;
+      document.getElementById('wyr-count-b').innerText = `${countB} Votes (${pctB}%)`;
+    }
+
+    // TRIVIA WHEEL
+    const categories = ["Science", "Pop Culture", "History", "Math Mystery", "Geography", "Brain Teaser"];
+    const colors = ["#f43f5e", "#8b5cf6", "#06b6d4", "#10b981", "#f59e0b", "#ec4899"];
+    let currentWheelAngle = 0;
+
+    function drawWheel() {
+      const canvas = document.getElementById('wheel-canvas');
+      const ctx = canvas.getContext('2d');
+      const num = categories.length;
+      const arc = (2 * Math.PI) / num;
+
+      ctx.clearRect(0, 0, 340, 340);
+
+      for (let i = 0; i < num; i++) {
+        const angle = currentWheelAngle + i * arc;
+        ctx.beginPath();
+        ctx.fillStyle = colors[i];
+        ctx.moveTo(170, 170);
+        ctx.arc(170, 170, 160, angle, angle + arc);
+        ctx.lineTo(170, 170);
+        ctx.fill();
+
+        // Text
+        ctx.save();
+        ctx.fillStyle = "#fff";
+        ctx.font = "bold 14px Fredoka, sans-serif";
+        ctx.translate(170 + Math.cos(angle + arc / 2) * 100, 170 + Math.sin(angle + arc / 2) * 100);
+        ctx.rotate(angle + arc / 2 + Math.PI / 2);
+        ctx.fillText(categories[i], -ctx.measureText(categories[i]).width / 2, 0);
+        ctx.restore();
+      }
+    }
+
+    function spinTriviaWheel() {
+      let speed = 0.3 + Math.random() * 0.2;
+      let duration = 3000;
+      let start = null;
+
+      function step(timestamp) {
+        if (!start) start = timestamp;
+        let progress = timestamp - start;
+        currentWheelAngle += speed;
+        speed *= 0.98;
+        drawWheel();
+
+        if (progress < duration) {
+          requestAnimationFrame(step);
+        } else {
+          playSFX('cheer');
+          revealTriviaQuestion();
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    function revealTriviaQuestion() {
+      const selected = categories[Math.floor(Math.random() * categories.length)];
+      document.getElementById('wheel-category-badge').innerText = selected;
+      document.getElementById('wheel-question-box').innerText = `What is a fascinating fun fact or question about ${selected}?`;
+      document.getElementById('wheel-answer-btn').classList.remove('hidden');
+      document.getElementById('wheel-answer-box').classList.add('hidden');
+    }
+
+    function toggleWheelAnswer() {
+      const ansBox = document.getElementById('wheel-answer-box');
+      ansBox.innerText = "Answer: Great job team! Award points on the top scoreboard!";
+      ansBox.classList.remove('hidden');
+    }
+
+    // Default Window Onload Initialization
+    window.onload = function() {
+      generateScattergoriesTopics();
+      generateBoggleGrid();
+      nextTabooCard();
+      nextFiveSecPrompt();
+      nextWYRPrompt();
+    };
+  </script>
+</body>
+</html>
