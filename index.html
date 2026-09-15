@@ -271,11 +271,20 @@
 
     <!-- GAME 1: SCATTERGORIES -->
     <div id="view-scattergories" class="hidden space-y-6">
-      <div class="flex items-center justify-between">
+      <div class="flex flex-wrap items-center justify-between gap-3">
         <button onclick="switchView('dashboard')" class="glass-button px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2">
           <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
         </button>
-        <span class="font-heading text-2xl text-amber-300 font-bold">Scattergories Challenge</span>
+        <div class="flex items-center gap-2">
+          <select id="scat-category-select" onchange="generateScattergoriesTopics()" class="bg-indigo-950 border border-amber-400/40 rounded-xl px-3 py-1.5 text-xs text-amber-200 focus:outline-none">
+            <option value="all">🌟 All Subjects (60+ Categories)</option>
+            <option value="stem">🧪 Science & STEM</option>
+            <option value="ela">📚 ELA & Literature</option>
+            <option value="social">🌍 History & Geography</option>
+            <option value="fun">🎉 Everyday & Fun</option>
+          </select>
+          <span class="font-heading text-2xl text-amber-300 font-bold">Scattergories Challenge</span>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -347,10 +356,12 @@
         </button>
         <div class="flex items-center gap-2">
           <select id="taboo-category-select" onchange="nextTabooCard()" class="bg-indigo-950 border border-purple-400/40 rounded-xl px-3 py-1.5 text-xs text-purple-200 focus:outline-none">
-            <option value="all">All Subject Categories</option>
-            <option value="general">General Fun</option>
-            <option value="science">Science & Nature</option>
-            <option value="history">History & Social Studies</option>
+            <option value="all">🌟 All Categories (50+ Cards)</option>
+            <option value="general">🎉 General Fun</option>
+            <option value="science">🧪 Science & Nature</option>
+            <option value="history">🏛️ History & Social Studies</option>
+            <option value="literature">📖 Literature & Language</option>
+            <option value="geography">🌍 Geography & Places</option>
           </select>
           <span class="font-heading text-2xl text-rose-300 font-bold">Don't Say It!</span>
         </div>
@@ -387,11 +398,20 @@
 
     <!-- GAME 4: 5-SECOND RULE -->
     <div id="view-fivesec" class="hidden space-y-6">
-      <div class="flex items-center justify-between">
+      <div class="flex flex-wrap items-center justify-between gap-3">
         <button onclick="switchView('dashboard')" class="glass-button px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2">
           <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
         </button>
-        <span class="font-heading text-2xl text-sky-300 font-bold">5-Second Rule</span>
+        <div class="flex items-center gap-2">
+          <select id="fivesec-category-select" onchange="nextFiveSecPrompt()" class="bg-indigo-950 border border-sky-400/40 rounded-xl px-3 py-1.5 text-xs text-sky-200 focus:outline-none">
+            <option value="all">⚡ All Prompts (50+ Challenges)</option>
+            <option value="stem">🧪 STEM & Science</option>
+            <option value="ela">📚 ELA & Vocabulary</option>
+            <option value="social">🗺️ Social Studies</option>
+            <option value="fun">🎈 General & Fun</option>
+          </select>
+          <span class="font-heading text-2xl text-sky-300 font-bold">5-Second Rule</span>
+        </div>
       </div>
 
       <div class="max-w-2xl mx-auto glass-panel p-8 rounded-3xl text-center space-y-6 border-2 border-sky-400/30">
@@ -431,6 +451,13 @@
         
         <!-- Prompt Box -->
         <div class="flex items-center gap-3 bg-purple-950/80 px-4 py-2 rounded-2xl border border-purple-400/30">
+          <select id="pic-category-select" onchange="newPictionaryPrompt()" class="bg-purple-900/60 border border-purple-400/30 rounded-lg px-2 py-1 text-xs text-purple-200 focus:outline-none">
+            <option value="all">🎨 All Prompts (60+ Words)</option>
+            <option value="easy">🟢 Easy / Objects</option>
+            <option value="medium">🟡 Medium / Actions</option>
+            <option value="hard">🔴 Challenge / Abstract</option>
+            <option value="science">🔬 Science & Animals</option>
+          </select>
           <span class="text-xs font-bold text-purple-300 uppercase">Prompt:</span>
           <span id="pictionary-prompt" class="font-heading font-bold text-white text-lg">???</span>
           <button onclick="newPictionaryPrompt()" class="text-xs text-purple-300 hover:text-white underline ml-2">Reveal New</button>
@@ -476,13 +503,23 @@
 
     <!-- GAME 7: WOULD YOU RATHER -->
     <div id="view-wyr" class="hidden space-y-6">
-      <div class="flex items-center justify-between">
+      <div class="flex flex-wrap items-center justify-between gap-3">
         <button onclick="switchView('dashboard')" class="glass-button px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2">
           <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
         </button>
-        <button onclick="nextWYRPrompt()" class="glass-button px-4 py-2 rounded-xl text-sm font-bold text-pink-300">
-          <i class="fa-solid fa-shuffle mr-1"></i> Next Scenario
-        </button>
+        <div class="flex flex-wrap items-center gap-2">
+          <select id="wyr-category-select" onchange="filterWYRCategory()" class="bg-indigo-950 border border-pink-400/40 rounded-xl px-3 py-1.5 text-xs text-pink-200 focus:outline-none">
+            <option value="all">🌟 All Categories (25+ Prompts)</option>
+            <option value="superpowers">⚡ Silly Superpowers</option>
+            <option value="adventure">🚀 Time & Space Adventure</option>
+            <option value="school">🏫 School & Life Scenarios</option>
+            <option value="animals">🦁 Animals & Nature</option>
+            <option value="food">🍕 Food & Flavor Debates</option>
+          </select>
+          <button onclick="nextWYRPrompt()" class="glass-button px-4 py-2 rounded-xl text-sm font-bold text-pink-300">
+            <i class="fa-solid fa-shuffle mr-1"></i> Next Scenario
+          </button>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
@@ -720,12 +757,70 @@
       }, 100);
     }
 
-    // SCATTERGORIES
-    const scatTopics = [
-      "Things found in a classroom", "Animals", "Foods or Snacks", "Boys or Girls Names",
-      "Countries or Cities", "Things that are green", "Types of Sports", "Movie or TV Titles",
-      "Verbs / Action Words", "Things in Space", "Items at a Grocery Store", "Jobs / Professions"
+    // SCATTERGORIES (60+ Topics & Categories)
+    const scatTopicsPool = [
+      // STEM
+      { cat: 'stem', text: "Things found in outer space" },
+      { cat: 'stem', text: "Types of weather or natural phenomena" },
+      { cat: 'stem', text: "Animals that live in water" },
+      { cat: 'stem', text: "Parts of the human body" },
+      { cat: 'stem', text: "Insects or bugs" },
+      { cat: 'stem', text: "Things that use electricity" },
+      { cat: 'stem', text: "Chemical elements or laboratory tools" },
+      { cat: 'stem', text: "Types of trees or flowers" },
+      { cat: 'stem', text: "Reptiles or Amphibians" },
+      { cat: 'stem', text: "Scientific measurements or units" },
+      { cat: 'stem', text: "Sources of energy" },
+      { cat: 'stem', text: "Dinosaurs or extinct creatures" },
+
+      // ELA
+      { cat: 'ela', text: "Action verbs ending in -ING" },
+      { cat: 'ela', text: "Adjectives that describe texture" },
+      { cat: 'ela', text: "Compound words" },
+      { cat: 'ela', text: "Book titles or famous characters" },
+      { cat: 'ela', text: "Words with double letters (e.g., Book)" },
+      { cat: 'ela', text: "Types of writing or genres" },
+      { cat: 'ela', text: "Palindromes or Rhyming pairs" },
+      { cat: 'ela', text: "Poetry terms or literary devices" },
+      { cat: 'ela', text: "Words with 4 or more syllables" },
+      { cat: 'ela', text: "Synonyms for 'HAPPY' or 'FAST'" },
+      { cat: 'ela', text: "Proper nouns / Name of a famous author" },
+      { cat: 'ela', text: "Words borrowed from another language" },
+
+      // SOCIAL STUDIES
+      { cat: 'social', text: "Countries in Asia or Europe" },
+      { cat: 'social', text: "US States or Capital cities" },
+      { cat: 'social', text: "Historical figures or leaders" },
+      { cat: 'social', text: "Types of terrain or landforms" },
+      { cat: 'social', text: "Rivers, Lakes, or Oceans" },
+      { cat: 'social', text: "Modes of transportation throughout history" },
+      { cat: 'social', text: "Inventions or technological discoveries" },
+      { cat: 'social', text: "Languages spoken around the world" },
+      { cat: 'social', text: "Historical events or wars" },
+      { cat: 'social', text: "Monuments or famous landmarks" },
+      { cat: 'social', text: "Currencies or types of money" },
+      { cat: 'social', text: "Ancient civilizations" },
+
+      // EVERYDAY & FUN
+      { cat: 'fun', text: "Things found in a school cafeteria" },
+      { cat: 'fun', text: "Breakfast foods or snacks" },
+      { cat: 'fun', text: "Types of sports or athletic events" },
+      { cat: 'fun', text: "Things you pack for a beach trip" },
+      { cat: 'fun', text: "Items found inside a backpack" },
+      { cat: 'fun', text: "Things that are bright red or yellow" },
+      { cat: 'fun', text: "Flavors of ice cream or candy" },
+      { cat: 'fun', text: "Board games or video games" },
+      { cat: 'fun', text: "Jobs or dream professions" },
+      { cat: 'fun', text: "Things that make a loud noise" },
+      { cat: 'fun', text: "Things made of metal or glass" },
+      { cat: 'fun', text: "Holidays or celebrations" },
+      { cat: 'fun', text: "Musical instruments" },
+      { cat: 'fun', text: "Things in a living room" },
+      { cat: 'fun', text: "Cartoon characters or superheroes" },
+      { cat: 'fun', text: "Things that melt" }
     ];
+
+    let scatDeck = [];
 
     function rollScattergoriesLetter() {
       const letters = "ABCDEFGHIJKLMNOPRSTW";
@@ -742,9 +837,25 @@
     }
 
     function generateScattergoriesTopics() {
-      const shuffled = [...scatTopics].sort(() => 0.5 - Math.random()).slice(0, 5);
+      const selectedCat = document.getElementById('scat-category-select')?.value || 'all';
+
+      if (!scatDeck || scatDeck.length < 5) {
+        const filtered = selectedCat === 'all' 
+          ? [...scatTopicsPool] 
+          : scatTopicsPool.filter(t => t.cat === selectedCat);
+        
+        scatDeck = (filtered.length >= 5 ? filtered : [...scatTopicsPool]).sort(() => 0.5 - Math.random());
+      }
+
+      const selectedTopics = [];
+      for (let i = 0; i < 5; i++) {
+        if (scatDeck.length > 0) {
+          selectedTopics.push(scatDeck.pop().text);
+        }
+      }
+
       const listEl = document.getElementById('scat-topics-list');
-      listEl.innerHTML = shuffled.map(topic => `<li class="p-3 bg-white/5 rounded-xl border border-white/10 font-semibold text-amber-200">${topic}</li>`).join('');
+      listEl.innerHTML = selectedTopics.map(topic => `<li class="p-3 bg-white/5 rounded-xl border border-white/10 font-semibold text-amber-200">${topic}</li>`).join('');
       playSFX('chime');
     }
 
@@ -766,37 +877,158 @@
       playSFX('chime');
     }
 
-    // DON'T SAY IT!
-    const tabooCards = [
+    // DON'T SAY IT! (50+ Cards)
+    const tabooCardsBank = [
+      // General
       { cat: 'general', word: 'PIZZA', forbidden: ['Cheese', 'Slice', 'Pepperoni', 'Italian'] },
       { cat: 'general', word: 'TEACHER', forbidden: ['School', 'Class', 'Homework', 'Grade'] },
+      { cat: 'general', word: 'AIRPORT', forbidden: ['Plane', 'Fly', 'Luggage', 'Ticket'] },
+      { cat: 'general', word: 'IPHONE', forbidden: ['Apple', 'Phone', 'Screen', 'App'] },
+      { cat: 'general', word: 'CAMPING', forbidden: ['Tent', 'Fire', 'Forest', 'Sleep'] },
+      { cat: 'general', word: 'SUPERMARKET', forbidden: ['Buy', 'Food', 'Cart', 'Store'] },
+      { cat: 'general', word: 'BICYCLE', forbidden: ['Pedal', 'Wheel', 'Helmet', 'Ride'] },
+      { cat: 'general', word: 'BIRTHDAY', forbidden: ['Cake', 'Candles', 'Party', 'Presents'] },
+      { cat: 'general', word: 'POP-CORN', forbidden: ['Movie', 'Butter', 'Kernels', 'Snack'] },
+      { cat: 'general', word: 'RAINBOW', forbidden: ['Colors', 'Sky', 'Rain', 'Sun'] },
+
+      // Science & Nature
       { cat: 'science', word: 'GRAVITY', forbidden: ['Fall', 'Earth', 'Space', 'Down'] },
       { cat: 'science', word: 'PHOTOSYNTHESIS', forbidden: ['Plant', 'Sun', 'Green', 'Leaves'] },
+      { cat: 'science', word: 'VOLCANO', forbidden: ['Lava', 'Erupt', 'Mountain', 'Ash'] },
+      { cat: 'science', word: 'MOLECULE', forbidden: ['Atom', 'Chemistry', 'Bond', 'Tiny'] },
+      { cat: 'science', word: 'ECLIPSE', forbidden: ['Sun', 'Moon', 'Shadow', 'Dark'] },
+      { cat: 'science', word: 'ELECTRICITY', forbidden: ['Power', 'Wire', 'Current', 'Light'] },
+      { cat: 'science', word: 'FOSSIL', forbidden: ['Dinosaur', 'Bones', 'Rock', 'Ancient'] },
+      { cat: 'science', word: 'EVAPORATION', forbidden: ['Water', 'Gas', 'Heat', 'Steam'] },
+      { cat: 'science', word: 'TELESCOPE', forbidden: ['Stars', 'Space', 'Look', 'Planet'] },
+      { cat: 'science', word: 'ECOSYSTEM', forbidden: ['Animals', 'Habitat', 'Nature', 'Environment'] },
+
+      // History & Social Studies
       { cat: 'history', word: 'PYRAMID', forbidden: ['Egypt', 'Pharaoh', 'Triangle', 'Ancient'] },
-      { cat: 'history', word: 'CASTLE', forbidden: ['King', 'Knight', 'Stone', 'Moat'] }
+      { cat: 'history', word: 'CASTLE', forbidden: ['King', 'Knight', 'Stone', 'Moat'] },
+      { cat: 'history', word: 'DECLARATION', forbidden: ['Freedom', 'America', 'July', 'Independence'] },
+      { cat: 'history', word: 'ASTRONAUT', forbidden: ['NASA', 'Moon', 'Space', 'Suit'] },
+      { cat: 'history', word: 'VIKING', forbidden: ['Ship', 'Warrior', 'Norway', 'Helmet'] },
+      { cat: 'history', word: 'MUSEUM', forbidden: ['History', 'Art', 'Exhibit', 'Old'] },
+      { cat: 'history', word: 'DEMOCRACY', forbidden: ['Vote', 'Election', 'Government', 'People'] },
+      { cat: 'history', word: 'COLOSSEUM', forbidden: ['Rome', 'Gladiator', 'Arena', 'Italy'] },
+      { cat: 'history', word: 'INVENTION', forbidden: ['Create', 'New', 'Patent', 'Idea'] },
+      { cat: 'history', word: 'EMPIRE', forbidden: ['Emperor', 'Rule', 'Land', 'Conquer'] },
+
+      // Literature & Language
+      { cat: 'literature', word: 'DICTIONARY', forbidden: ['Words', 'Define', 'Alphabet', 'Book'] },
+      { cat: 'literature', word: 'METAPHOR', forbidden: ['Like', 'As', 'Comparison', 'Poem'] },
+      { cat: 'literature', word: 'SHAKESPEARE', forbidden: ['Play', 'Hamlet', 'Actor', 'Writer'] },
+      { cat: 'literature', word: 'BIOGRAPHY', forbidden: ['Life', 'Story', 'Person', 'Real'] },
+      { cat: 'literature', word: 'LIBRARY', forbidden: ['Books', 'Read', 'Quiet', 'Borrow'] },
+      { cat: 'literature', word: 'CHARACTER', forbidden: ['Story', 'Book', 'Person', 'Hero'] },
+      { cat: 'literature', word: 'ALLITERATION', forbidden: ['Sounds', 'Letters', 'Repeat', 'Tongue'] },
+      { cat: 'literature', word: 'MYSTERY', forbidden: ['Secret', 'Clue', 'Detective', 'Solve'] },
+
+      // Geography & Places
+      { cat: 'geography', word: 'RAINFOREST', forbidden: ['Trees', 'Amazon', 'Jungle', 'Green'] },
+      { cat: 'geography', word: 'GLACIER', forbidden: ['Ice', 'Cold', 'Melt', 'Snow'] },
+      { cat: 'geography', word: 'EQUATOR', forbidden: ['Middle', 'Earth', 'Hot', 'Line'] },
+      { cat: 'geography', word: 'ISLAND', forbidden: ['Water', 'Ocean', 'Beach', 'Land'] },
+      { cat: 'geography', word: 'DESERT', forbidden: ['Sand', 'Dry', 'Cactus', 'Hot'] },
+      { cat: 'geography', word: 'PENINSULA', forbidden: ['Water', 'Land', 'Florida', 'Three'] },
+      { cat: 'geography', word: 'MOUNTAIN', forbidden: ['Peak', 'Climb', 'Everest', 'High'] },
+      { cat: 'geography', word: 'CANYON', forbidden: ['Grand', 'Rock', 'Valley', 'River'] }
     ];
+
+    let tabooDeck = [];
 
     function nextTabooCard() {
       const catSelect = document.getElementById('taboo-category-select').value;
-      const filtered = catSelect === 'all' ? tabooCards : tabooCards.filter(c => c.cat === catSelect);
-      const card = filtered[Math.floor(Math.random() * filtered.length)];
+      
+      if (!tabooDeck || tabooDeck.length === 0) {
+        const filtered = catSelect === 'all' 
+          ? [...tabooCardsBank] 
+          : tabooCardsBank.filter(c => c.cat === catSelect);
+        
+        tabooDeck = (filtered.length > 0 ? filtered : [...tabooCardsBank]).sort(() => Math.random() - 0.5);
+      }
 
+      const card = tabooDeck.pop();
       document.getElementById('taboo-target').innerText = card.word;
       const listEl = document.getElementById('taboo-forbidden');
       listEl.innerHTML = card.forbidden.map(w => `<li>${w}</li>`).join('');
       playSFX('chime');
     }
 
-    // 5-SECOND RULE
-    const fiveSecPrompts = [
-      "Yellow Foods", "Superhero Powers", "Things in an Airport", "Types of Trees",
-      "Pizza Toppings", "Things with Wheels", "Words starting with 'S'", "Ocean Creatures"
+    // 5-SECOND RULE (50+ Prompts)
+    const fiveSecPromptsBank = [
+      // STEM
+      { cat: 'stem', text: "Yellow Foods or Vegetables" },
+      { cat: 'stem', text: "Types of Trees or Plants" },
+      { cat: 'stem', text: "Animals with Whiskers" },
+      { cat: 'stem', text: "Things found in a Science Lab" },
+      { cat: 'stem', text: "Planets or Astronomical Objects" },
+      { cat: 'stem', text: "Things that spin or rotate" },
+      { cat: 'stem', text: "Creatures that live underwater" },
+      { cat: 'stem', text: "Organs inside the human body" },
+      { cat: 'stem', text: "Things that fly (natural or man-made)" },
+      { cat: 'stem', text: "Sources of light" },
+      { cat: 'stem', text: "Things that are transparent or clear" },
+      { cat: 'stem', text: "Reptiles or Amphibians" },
+
+      // ELA
+      { cat: 'ela', text: "Words starting with the letter 'S'" },
+      { cat: 'ela', text: "Famous fictional characters" },
+      { cat: 'ela', text: "Words that rhyme with 'CAT'" },
+      { cat: 'ela', text: "Action verbs ending in -ED" },
+      { cat: 'ela', text: "Types of punctuation marks" },
+      { cat: 'ela', text: "Authors or Book Series" },
+      { cat: 'ela', text: "Compound words" },
+      { cat: 'ela', text: "Adjectives to describe the weather" },
+      { cat: 'ela', text: "Words with 3 or more vowels" },
+      { cat: 'ela', text: "Synonyms for 'BIG' or 'SMALL'" },
+
+      // SOCIAL STUDIES
+      { cat: 'social', text: "Countries in Europe or South America" },
+      { cat: 'social', text: "US States or World Capitals" },
+      { cat: 'social', text: "Transportation vehicles" },
+      { cat: 'social', text: "Languages spoken in the world" },
+      { cat: 'social', text: "Types of landforms (e.g., Island)" },
+      { cat: 'social', text: "Historical US Presidents" },
+      { cat: 'social', text: "Currencies or Coins" },
+      { cat: 'social', text: "Ocean names or seas" },
+      { cat: 'social', text: "Inventions used every day" },
+
+      // FUN & GENERAL
+      { cat: 'fun', text: "Pizza toppings" },
+      { cat: 'fun', text: "Superhero powers" },
+      { cat: 'fun', text: "Things found in an Airport" },
+      { cat: 'fun', text: "Things with Wheels" },
+      { cat: 'fun', text: "Flavors of Ice Cream" },
+      { cat: 'fun', text: "Sports played with a ball" },
+      { cat: 'fun', text: "Things in your bedroom" },
+      { cat: 'fun', text: "Breakfast foods" },
+      { cat: 'fun', text: "Things you wear on your feet" },
+      { cat: 'fun', text: "Types of candy or sweets" },
+      { cat: 'fun', text: "Musical instruments" },
+      { cat: 'fun', text: "Things that melt in the sun" },
+      { cat: 'fun', text: "Board games or video games" },
+      { cat: 'fun', text: "Things you find at a zoo" },
+      { cat: 'fun', text: "Things that cost less than $5" }
     ];
+
+    let fiveSecDeck = [];
     let fiveSecInterval = null;
 
     function nextFiveSecPrompt() {
-      const p = fiveSecPrompts[Math.floor(Math.random() * fiveSecPrompts.length)];
-      document.getElementById('fivesec-prompt').innerText = p;
+      const selectedCat = document.getElementById('fivesec-category-select')?.value || 'all';
+
+      if (!fiveSecDeck || fiveSecDeck.length === 0) {
+        const filtered = selectedCat === 'all'
+          ? [...fiveSecPromptsBank]
+          : fiveSecPromptsBank.filter(p => p.cat === selectedCat);
+        
+        fiveSecDeck = (filtered.length > 0 ? filtered : [...fiveSecPromptsBank]).sort(() => Math.random() - 0.5);
+      }
+
+      const p = fiveSecDeck.pop();
+      document.getElementById('fivesec-prompt').innerText = p.text;
       resetFiveSecTimer();
     }
 
@@ -828,27 +1060,50 @@
       }, 1000);
     }
 
-    // DRAW & GUESS (PICTIONARY)
-    const picPrompts = ["Cat", "Rocket", "Bicycle", "Eiffel Tower", "Ice Cream", "Volcano", "Robot", "Guitar"];
+    // DRAW & GUESS (PICTIONARY - 60+ Prompts)
+    const picPromptsBank = [
+      // Easy / Objects
+      { cat: 'easy', text: "Cat" }, { cat: 'easy', text: "Bicycle" }, { cat: 'easy', text: "Ice Cream" },
+      { cat: 'easy', text: "Guitar" }, { cat: 'easy', text: "Sun" }, { cat: 'easy', text: "House" },
+      { cat: 'easy', text: "Pizza" }, { cat: 'easy', text: "Car" }, { cat: 'easy', text: "Tree" },
+      { cat: 'easy', text: "Clock" }, { cat: 'easy', text: "Book" }, { cat: 'easy', text: "Fish" },
+
+      // Medium / Actions
+      { cat: 'medium', text: "Rocket" }, { cat: 'medium', text: "Volcano" }, { cat: 'medium', text: "Robot" },
+      { cat: 'medium', text: "Skateboarder" }, { cat: 'medium', text: "Astronaut" }, { cat: 'medium', text: "Submarine" },
+      { cat: 'medium', text: "Campfire" }, { cat: 'medium', text: "Windmill" }, { cat: 'medium', text: "Tornado" },
+      { cat: 'medium', text: "Lighthouse" }, { cat: 'medium', text: "Helicopter" }, { cat: 'medium', text: "Scuba Diver" },
+
+      // Hard / Abstract
+      { cat: 'hard', text: "Eiffel Tower" }, { cat: 'hard', text: "Gravity" }, { cat: 'hard', text: "Time Travel" },
+      { cat: 'hard', text: "Solar Eclipse" }, { cat: 'hard', text: "Brainstorm" }, { cat: 'hard', text: "Electric Current" },
+      { cat: 'hard', text: "Constellation" }, { cat: 'hard', text: "Photosynthesis" }, { cat: 'hard', text: "Soundwave" },
+      { cat: 'hard', text: "Black Hole" }, { cat: 'hard', text: "Virtual Reality" }, { cat: 'hard', text: "Archaeology" },
+
+      // Science & Nature
+      { cat: 'science', text: "Tyrannosaurus" }, { cat: 'science', text: "Octopus" }, { cat: 'science', text: "Microscope" },
+      { cat: 'science', text: "DNA Strand" }, { cat: 'science', text: "Cactus" }, { cat: 'science', text: "Penguin" },
+      { cat: 'science', text: "Chameleon" }, { cat: 'science', text: "Saturn Ring" }, { cat: 'science', text: "Atom" },
+      { cat: 'science', text: "Jellyfish" }, { cat: 'science', text: "Magnet" }, { cat: 'science', text: "Butterfly Life Cycle" }
+    ];
+
+    let picDeck = [];
     let canvas, ctx, isDrawing = false;
 
     function initPictionaryCanvas() {
       canvas = document.getElementById('drawing-canvas');
       ctx = canvas.getContext('2d');
       
-      // Handle canvas resolution
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
 
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
 
-      // Mouse events
       canvas.onmousedown = (e) => { isDrawing = true; draw(e); };
       canvas.onmousemove = draw;
       canvas.onmouseup = () => isDrawing = false;
 
-      // Touch events for mobile/smartboards
       canvas.ontouchstart = (e) => { isDrawing = true; draw(e.touches[0]); };
       canvas.ontouchmove = (e) => draw(e.touches[0]);
       canvas.ontouchend = () => isDrawing = false;
@@ -876,13 +1131,34 @@
     }
 
     function newPictionaryPrompt() {
-      const p = picPrompts[Math.floor(Math.random() * picPrompts.length)];
-      document.getElementById('pictionary-prompt').innerText = p;
+      const selectedCat = document.getElementById('pic-category-select')?.value || 'all';
+
+      if (!picDeck || picDeck.length === 0) {
+        const filtered = selectedCat === 'all'
+          ? [...picPromptsBank]
+          : picPromptsBank.filter(p => p.cat === selectedCat);
+        
+        picDeck = (filtered.length > 0 ? filtered : [...picPromptsBank]).sort(() => Math.random() - 0.5);
+      }
+
+      const p = picDeck.pop();
+      document.getElementById('pictionary-prompt').innerText = p.text;
       clearCanvas();
     }
 
-    // CLASSROOM WORDLE
-    const wordleList = ["BRAIN", "CLASS", "LEARN", "SMART", "PAPER", "PENCIL", "TEACH"];
+    // CLASSROOM WORDLE (100+ School Words)
+    const wordleList = [
+      "BRAIN", "CLASS", "LEARN", "SMART", "PAPER", "PENCIL", "TEACH", "THINK", "SOLAR", "OXYGEN",
+      "GLOBE", "GRAPH", "ANGLE", "FRACTION", "NOVEL", "RHYME", "DRAFT", "COUNT", "SCORE", "WORLD",
+      "SPACE", "PLANT", "LIGHT", "WATER", "EARTH", "FORCE", "SOUND", "PROOF", "TOPIC", "STORY",
+      "CHALK", "CLOCK", "STUDY", "GRADE", "WRITE", "SOLVE", "SCALE", "CHART", "PRISM", "ROBOT",
+      "FLEET", "CROWN", "SHIELD", "SWORD", "TOWER", "KINGDOM", "ORBIT", "COMET", "MARS", "VENUS",
+      "MAPLE", "OCEAN", "RIVER", "BEACH", "STORM", "CLOUD", "RAIN", "SNOWY", "FROST", "FLAME",
+      "LAVA", "MAGMA", "DESERT", "JUNGLE", "ANIMAL", "TIGER", "EAGLE", "WHALE", "SHARK", "SHERIFF",
+      "LOGIC", "CHECK", "GUESS", "MATCH", "BOARD", "GAMES", "TEAM", "POINT", "PRIZE", "WINNER",
+      "CIVIC", "STATE", "JUDGE", "LAW", "RIGHT", "PEACE", "TRUTH", "TRUST", "POWER", "ENERG"
+    ];
+    let wordleDeck = [];
     let targetWordle = "SMART";
     let wordleRow = 0;
     let wordleCol = 0;
@@ -891,7 +1167,10 @@
 
     function initWordleBoard() {
       wordleInitialized = true;
-      targetWordle = wordleList[Math.floor(Math.random() * wordleList.length)];
+      if (!wordleDeck || wordleDeck.length === 0) {
+        wordleDeck = [...wordleList].sort(() => Math.random() - 0.5);
+      }
+      targetWordle = wordleDeck.pop();
       wordleRow = 0;
       wordleCol = 0;
       currentGuess = "";
@@ -910,7 +1189,6 @@
         board.appendChild(row);
       }
 
-      // Keyboard
       const keys = ["QWERTYUIOP", "ASDFGHJKL", ["ENTER", ..."ZXCVBNM", "DEL"]];
       const kb = document.getElementById('wordle-keyboard');
       kb.innerHTML = '';
@@ -970,107 +1248,243 @@
 
     function resetWordleGame() { initWordleBoard(); }
 
-    // WOULD YOU RATHER
+    // WOULD YOU RATHER (25+ Scenarios)
     const wyrPrompts = [
-      { a: "Have a flying carpet", b: "Have a invisible cloak" },
-      { a: "Explore the deep ocean", b: "Explore outer space" },
-      { a: "Always speak in rhymes", b: "Always sing instead of speak" }
+      { cat: "superpowers", a: "Be able to fly, but only as fast as a walking speed", b: "Be invisible, but only when nobody is looking at you" },
+      { cat: "superpowers", a: "Have a magic carpet that flies anywhere", b: "Have an invisibility cloak that works anytime" },
+      { cat: "superpowers", a: "Be able to talk to all animals", b: "Be able to speak every human language fluently" },
+      { cat: "superpowers", a: "Have super strength for 10 minutes a day", b: "Be able to read minds for 1 minute a day" },
+      { cat: "superpowers", a: "Control fire with your hands", b: "Control water and ice with your hands" },
+      { cat: "superpowers", a: "Have elastic super-stretchy arms", b: "Have super speed like The Flash" },
+
+      { cat: "adventure", a: "Explore the deepest trench in the ocean", b: "Be the first astronaut to land on Mars" },
+      { cat: "adventure", a: "Travel 500 years into the past", b: "Travel 500 years into the future" },
+      { cat: "adventure", a: "Live in a treehouse village in a rainforest", b: "Live in a futuristic underwater glass dome" },
+      { cat: "adventure", a: "Discover an ancient buried treasure chest", b: "Discover a secret friendly alien outpost" },
+      { cat: "adventure", a: "Be a famous pirate captain", b: "Be a knight guarding a medieval kingdom" },
+
+      { cat: "school", a: "Have recess all day long but no summer break", b: "Have a 4-month summer break but 8-hour school days" },
+      { cat: "school", a: "Always speak in rhymes whenever you talk", b: "Always sing out loud instead of speaking normally" },
+      { cat: "school", a: "Have a homework robot that does your work", b: "Have a chef robot that makes your favorite lunch every day" },
+      { cat: "school", a: "Accidentally wear pajamas to school every Monday", b: "Accidentally wear a full superhero suit to school on Picture Day" },
+      { cat: "school", a: "Never have to take a quiz or test again", b: "Never have to do homework again" },
+
+      { cat: "animals", a: "Have a pet baby dinosaur the size of a puppy", b: "Have a pet miniature dragon that breathes tiny sparks" },
+      { cat: "animals", a: "Shrink to the size of an ant for 24 hours", b: "Grow to the size of a 3-story building for 24 hours" },
+      { cat: "animals", a: "Be able to breathe underwater like a fish", b: "Be able to night-vision see like an owl" },
+      { cat: "animals", a: "Ride a giant eagle into battle", b: "Ride an armored rhino into battle" },
+
+      { cat: "food", a: "Eat only pizza for every meal for a year", b: "Eat only tacos for every meal for a year" },
+      { cat: "food", a: "Have ice cream as hot as soup", b: "Have hot soup as cold as ice cream" },
+      { cat: "food", a: "Taste maple syrup every time you drink water", b: "Taste melted cheese every time you drink soda" },
+      { cat: "food", a: "Only be able to whisper for the rest of your life", b: "Only be able to shout for the rest of your life" }
     ];
+
+    let wyrDeck = [];
     let countA = 0, countB = 0;
 
+    function filterWYRCategory() {
+      const selectedCat = document.getElementById('wyr-category-select').value;
+      if (selectedCat === 'all') {
+        wyrDeck = [...wyrPrompts];
+      } else {
+        wyrDeck = wyrPrompts.filter(p => p.cat === selectedCat);
+      }
+      wyrDeck.sort(() => Math.random() - 0.5);
+      nextWYRPrompt();
+    }
+
     function nextWYRPrompt() {
-      const p = wyrPrompts[Math.floor(Math.random() * wyrPrompts.length)];
+      if (!wyrDeck || wyrDeck.length === 0) {
+        const selectedCat = document.getElementById('wyr-category-select')?.value || 'all';
+        wyrDeck = selectedCat === 'all' 
+          ? [...wyrPrompts] 
+          : wyrPrompts.filter(p => p.cat === selectedCat);
+        
+        if (wyrDeck.length === 0) wyrDeck = [...wyrPrompts];
+        wyrDeck.sort(() => Math.random() - 0.5);
+      }
+
+      const p = wyrDeck.pop();
       document.getElementById('wyr-option-a').innerText = p.a;
       document.getElementById('wyr-option-b').innerText = p.b;
-      countA = 0; countB = 0;
+      countA = 0; 
+      countB = 0;
       updateWYRStats();
     }
 
     function voteWYR(option) {
       if (option === 'A') countA++;
-      else countB++;
-      updateWYRStats();
+      if (option === 'B') countB++;
       playSFX('chime');
+      updateWYRStats();
     }
 
     function updateWYRStats() {
-      const total = countA + countB || 1;
-      const pctA = Math.round((countA / total) * 100);
-      const pctB = Math.round((countB / total) * 100);
+      const total = countA + countB;
+      const pctA = total === 0 ? 50 : Math.round((countA / total) * 100);
+      const pctB = total === 0 ? 50 : 100 - pctA;
 
       document.getElementById('wyr-bar-a').style.width = `${pctA}%`;
       document.getElementById('wyr-bar-b').style.width = `${pctB}%`;
+
       document.getElementById('wyr-count-a').innerText = `${countA} Votes (${pctA}%)`;
       document.getElementById('wyr-count-b').innerText = `${countB} Votes (${pctB}%)`;
     }
 
-    // TRIVIA WHEEL
-    const categories = ["Science", "Pop Culture", "History", "Math Mystery", "Geography", "Brain Teaser"];
-    const colors = ["#f43f5e", "#8b5cf6", "#06b6d4", "#10b981", "#f59e0b", "#ec4899"];
+    // TRIVIA WHEEL (50+ Trivia Questions across 6 Categories)
+    const wheelCategories = [
+      { name: "Science", color: "#ec4899" },
+      { name: "History", color: "#8b5cf6" },
+      { name: "Language", color: "#3b82f6" },
+      { name: "Geography", color: "#10b981" },
+      { name: "Math & Puzzlers", color: "#f59e0b" },
+      { name: "Pop & Fun", color: "#06b6d4" }
+    ];
+
+    const triviaBank = {
+      "Science": [
+        { q: "What gas do plants absorb from the atmosphere for photosynthesis?", a: "Carbon Dioxide (CO2)" },
+        { q: "What is the hardest natural substance found on Earth?", a: "Diamond" },
+        { q: "Which planet in our solar system has the most moon moons?", a: "Saturn (with over 140 moons)" },
+        { q: "What is the powerhouse of the human cell?", a: "Mitochondria" },
+        { q: "At what temperature Celsius does pure water freeze?", a: "0 degrees Celsius (32°F)" }
+      ],
+      "History": [
+        { q: "In what year did the Apollo 11 mission land humans on the Moon?", a: "1969" },
+        { q: "Which ancient civilization built the Great Pyramid of Giza?", a: "Ancient Egyptians" },
+        { q: "Who was the first President of the United States?", a: "George Washington" },
+        { q: "What famous wall in Germany fell in 1989, reuniting the city of Berlin?", a: "The Berlin Wall" },
+        { q: "Which queen ruled Great Britain for 63 years during the 19th century industrial revolution?", a: "Queen Victoria" }
+      ],
+      "Language": [
+        { q: "What figure of speech compares two things using 'like' or 'as'?", a: "A Simile" },
+        { q: "What is the term for a word that reads the same backward and forward (e.g., RACECAR)?", a: "A Palindrome" },
+        { q: "Who wrote the famous plays 'Romeo and Juliet' and 'Macbeth'?", a: "William Shakespeare" },
+        { q: "What punctuation mark is used to show ownership or contraction?", a: "An Apostrophe" },
+        { q: "What do we call words that sound the same but have different meanings and spellings (e.g., hear / here)?", a: "Homophones" }
+      ],
+      "Geography": [
+        { q: "What is the longest river in the world?", a: "The Nile River (or Amazon River)" },
+        { q: "What is the capital city of Australia?", a: "Canberra" },
+        { q: "Which continent is home to the Amazon Rainforest?", a: "South America" },
+        { q: "What is the smallest country in the world by area?", a: "Vatican City" },
+        { q: "What mountain range contains Mount Everest, the highest peak on Earth?", a: "The Himalayas" }
+      ],
+      "Math & Puzzlers": [
+        { q: "What is the perimeter of a square with a side length of 7 cm?", a: "28 cm (7 x 4)" },
+        { q: "What is the value of Pi rounded to two decimal places?", a: "3.14" },
+        { q: "If a triangle has angles of 90° and 45°, what is the third angle?", a: "45 degrees (total is 180°)" },
+        { q: "What is 15 multiplied by 4?", a: "60" },
+        { q: "How many sides does a regular octagon have?", a: "8 sides" }
+      ],
+      "Pop & Fun": [
+        { q: "In video games, what kingdom is Mario usually trying to save?", a: "The Mushroom Kingdom" },
+        { q: "What color are Mickey Mouse's shorts?", a: "Red (with white buttons)" },
+        { q: "Which superhero is known as the 'Friendly Neighborhood' hero?", a: "Spider-Man" },
+        { q: "How many spots are on a standard single die?", a: "21 spots" },
+        { q: "In Disney's 'Frozen', what is the name of the friendly talking snowman?", a: "Olaf" }
+      ]
+    };
+
     let currentWheelAngle = 0;
+    let isWheelSpinning = false;
+    let currentTriviaQA = null;
 
     function drawWheel() {
       const canvas = document.getElementById('wheel-canvas');
+      if (!canvas) return;
       const ctx = canvas.getContext('2d');
-      const num = categories.length;
-      const arc = (2 * Math.PI) / num;
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const radius = 150;
 
-      ctx.clearRect(0, 0, 340, 340);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const sliceAngle = (2 * Math.PI) / wheelCategories.length;
 
-      for (let i = 0; i < num; i++) {
-        const angle = currentWheelAngle + i * arc;
+      wheelCategories.forEach((cat, index) => {
+        const startAngle = currentWheelAngle + (index * sliceAngle);
+        const endAngle = startAngle + sliceAngle;
+
         ctx.beginPath();
-        ctx.fillStyle = colors[i];
-        ctx.moveTo(170, 170);
-        ctx.arc(170, 170, 160, angle, angle + arc);
-        ctx.lineTo(170, 170);
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.fillStyle = cat.color;
         ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#ffffff';
+        ctx.stroke();
 
-        // Text
         ctx.save();
-        ctx.fillStyle = "#fff";
-        ctx.font = "bold 14px Fredoka, sans-serif";
-        ctx.translate(170 + Math.cos(angle + arc / 2) * 100, 170 + Math.sin(angle + arc / 2) * 100);
-        ctx.rotate(angle + arc / 2 + Math.PI / 2);
-        ctx.fillText(categories[i], -ctx.measureText(categories[i]).width / 2, 0);
+        ctx.translate(centerX, centerY);
+        ctx.rotate(startAngle + sliceAngle / 2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 13px Outfit, sans-serif";
+        ctx.fillText(cat.name, radius - 15, 5);
         ctx.restore();
-      }
+      });
     }
 
     function spinTriviaWheel() {
-      let speed = 0.3 + Math.random() * 0.2;
-      let duration = 3000;
-      let start = null;
+      if (isWheelSpinning) return;
+      isWheelSpinning = true;
+      playSFX('drumroll');
 
-      function step(timestamp) {
-        if (!start) start = timestamp;
-        let progress = timestamp - start;
-        currentWheelAngle += speed;
-        speed *= 0.98;
-        drawWheel();
+      document.getElementById('wheel-answer-btn').classList.add('hidden');
+      document.getElementById('wheel-answer-box').classList.add('hidden');
+      document.getElementById('wheel-question-box').innerText = "Spinning...";
 
-        if (progress < duration) {
-          requestAnimationFrame(step);
+      const totalRotation = Math.PI * 2 * (5 + Math.random() * 5);
+      const startAngle = currentWheelAngle;
+      const startTime = performance.now();
+      const duration = 3500;
+
+      function animateSpin(currentTime) {
+        const elapsed = currentTime - startTime;
+        if (elapsed < duration) {
+          const progress = elapsed / duration;
+          const easeOut = 1 - Math.pow(1 - progress, 3);
+          currentWheelAngle = startAngle + (totalRotation * easeOut);
+          drawWheel();
+          requestAnimationFrame(animateSpin);
         } else {
-          playSFX('cheer');
-          revealTriviaQuestion();
+          currentWheelAngle = (startAngle + totalRotation) % (Math.PI * 2);
+          drawWheel();
+          isWheelSpinning = false;
+          determineWheelResult();
         }
       }
-      requestAnimationFrame(step);
+      requestAnimationFrame(animateSpin);
     }
 
-    function revealTriviaQuestion() {
-      const selected = categories[Math.floor(Math.random() * categories.length)];
-      document.getElementById('wheel-category-badge').innerText = selected;
-      document.getElementById('wheel-question-box').innerText = `What is a fascinating fun fact or question about ${selected}?`;
+    function determineWheelResult() {
+      const sliceAngle = (2 * Math.PI) / wheelCategories.length;
+      // Pointer is at 270 degrees (Top)
+      const pointerAngle = (3 * Math.PI / 2);
+      let normalized = (pointerAngle - currentWheelAngle) % (Math.PI * 2);
+      if (normalized < 0) normalized += Math.PI * 2;
+
+      const winningIndex = Math.floor(normalized / sliceAngle) % wheelCategories.length;
+      const category = wheelCategories[winningIndex].name;
+
+      document.getElementById('wheel-category-badge').innerText = `CATEGORY: ${category.toUpperCase()}`;
+      
+      const qList = triviaBank[category] || triviaBank["Science"];
+      currentTriviaQA = qList[Math.floor(Math.random() * qList.length)];
+
+      document.getElementById('wheel-question-box').innerText = currentTriviaQA.q;
+      document.getElementById('wheel-answer-box').innerText = currentTriviaQA.a;
       document.getElementById('wheel-answer-btn').classList.remove('hidden');
-      document.getElementById('wheel-answer-box').classList.add('hidden');
+      playSFX('cheer');
     }
 
     function toggleWheelAnswer() {
       const ansBox = document.getElementById('wheel-answer-box');
-      ansBox.innerText = "Answer: Great job team! Award points on the top scoreboard!";
-      ansBox.classList.remove('hidden');
+      if (ansBox) {
+        ansBox.classList.toggle('hidden');
+        playSFX('chime');
+      }
     }
 
     // Default Window Onload Initialization
