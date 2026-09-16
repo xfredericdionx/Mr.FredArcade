@@ -448,20 +448,6 @@
         <button onclick="switchView('dashboard')" class="glass-button px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2">
           <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
         </button>
-        
-        <!-- Prompt Box -->
-        <div class="flex items-center gap-3 bg-purple-950/80 px-4 py-2 rounded-2xl border border-purple-400/30">
-          <select id="pic-category-select" onchange="newPictionaryPrompt()" class="bg-purple-900/60 border border-purple-400/30 rounded-lg px-2 py-1 text-xs text-purple-200 focus:outline-none">
-            <option value="all">🎨 All Prompts (60+ Words)</option>
-            <option value="easy">🟢 Easy / Objects</option>
-            <option value="medium">🟡 Medium / Actions</option>
-            <option value="hard">🔴 Challenge / Abstract</option>
-            <option value="science">🔬 Science & Animals</option>
-          </select>
-          <span class="text-xs font-bold text-purple-300 uppercase">Prompt:</span>
-          <span id="pictionary-prompt" class="font-heading font-bold text-white text-lg">???</span>
-          <button onclick="newPictionaryPrompt()" class="text-xs text-purple-300 hover:text-white underline ml-2">Reveal New</button>
-        </div>
 
         <!-- Canvas Controls -->
         <div class="flex items-center gap-2 bg-slate-900/80 p-1.5 rounded-2xl border border-white/10">
@@ -474,6 +460,36 @@
       <!-- Canvas Area -->
       <div class="glass-panel p-2 rounded-3xl border border-purple-500/30">
         <canvas id="drawing-canvas" class="w-full h-[450px] bg-slate-950 rounded-2xl cursor-crosshair touch-none"></canvas>
+      </div>
+
+      <!-- Bottom Secret Prompt Area -->
+      <div class="flex flex-col items-center justify-center mt-2">
+        <div class="bg-purple-950/80 px-6 py-4 rounded-3xl border border-purple-400/30 flex flex-col items-center gap-3 w-full max-w-lg shadow-xl shadow-purple-900/20">
+          
+          <div class="flex items-center gap-3 w-full justify-center">
+            <select id="pic-category-select" onchange="newPictionaryPrompt()" class="bg-purple-900/60 border border-purple-400/30 rounded-lg px-2 py-1.5 text-sm text-purple-200 focus:outline-none flex-1">
+              <option value="all">🎨 All Prompts (60+ Words)</option>
+              <option value="easy">🟢 Easy / Objects</option>
+              <option value="medium">🟡 Medium / Actions</option>
+              <option value="hard">🔴 Challenge / Abstract</option>
+              <option value="science">🔬 Science & Animals</option>
+            </select>
+            <button onclick="newPictionaryPrompt()" class="glass-button px-4 py-1.5 rounded-xl text-sm font-bold text-white bg-purple-500/40 hover:bg-purple-500/60 whitespace-nowrap">
+              <i class="fa-solid fa-rotate mr-1"></i> New
+            </button>
+          </div>
+
+          <div class="bg-black/40 w-full rounded-2xl p-4 flex items-center justify-between border border-purple-500/20">
+            <span class="text-xs font-bold text-purple-400 uppercase tracking-widest">Secret Prompt:</span>
+            <div class="flex items-center gap-3">
+              <span id="pictionary-prompt" class="font-heading font-bold text-purple-300/50 italic text-2xl select-none cursor-pointer" onclick="togglePictionaryPrompt()">••••••••</span>
+              <button onclick="togglePictionaryPrompt()" class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-300 hover:bg-purple-500/40 hover:text-white transition-colors flex items-center justify-center">
+                <i id="pic-eye-icon" class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+          <p class="text-[10px] text-purple-300/60 uppercase tracking-widest">Click eye icon or text to reveal to the drawer</p>
+        </div>
       </div>
     </div>
 
@@ -1089,6 +1105,8 @@
 
     let picDeck = [];
     let canvas, ctx, isDrawing = false;
+    let currentPicPrompt = "";
+    let picPromptVisible = false;
 
     function initPictionaryCanvas() {
       canvas = document.getElementById('drawing-canvas');
@@ -1142,8 +1160,34 @@
       }
 
       const p = picDeck.pop();
-      document.getElementById('pictionary-prompt').innerText = p.text;
+      currentPicPrompt = p.text;
+      picPromptVisible = false;
+      updatePictionaryPromptUI();
       clearCanvas();
+    }
+
+    function togglePictionaryPrompt() {
+      if (!currentPicPrompt) return;
+      picPromptVisible = !picPromptVisible;
+      updatePictionaryPromptUI();
+    }
+
+    function updatePictionaryPromptUI() {
+      const display = document.getElementById('pictionary-prompt');
+      const eyeBtn = document.getElementById('pic-eye-icon');
+      if (!display) return;
+      
+      if (picPromptVisible) {
+        display.innerText = currentPicPrompt;
+        display.classList.remove('text-purple-300/50', 'italic');
+        display.classList.add('text-white');
+        if(eyeBtn) eyeBtn.className = 'fa-solid fa-eye-slash';
+      } else {
+        display.innerText = "••••••••";
+        display.classList.remove('text-white');
+        display.classList.add('text-purple-300/50', 'italic');
+        if(eyeBtn) eyeBtn.className = 'fa-solid fa-eye';
+      }
     }
 
     // CLASSROOM WORDLE (100+ School Words)
